@@ -1,1 +1,1 @@
-# coffee_erp
+# ./startapp.sh erp
