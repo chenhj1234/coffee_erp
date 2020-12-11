@@ -1,8 +1,23 @@
+{% extends 'base.html' %}
 
-<html>
-<head> <title>Main</title> </head>
-<body>
-    <a href="{{ url_for('auth.login') }}">Log In</a>
-    <a href="{{ url_for('auth.register') }}">Register</a>
-</body>
-</html>
+{% block header %}
+  <h1>{% block title %}Main Page{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+<a href="{{ url_for('supplier.addsupplier') }}"> 新建供應商 </a>
+<a href="{{ url_for('supplier.supplier_handler') }}"> 列出所有供應商 </a>
+<hr/>
+<a href="{{ url_for('customer.addcustomer') }}"> 新建客戶資料 </a>
+<a href="{{ url_for('customer.customer_handler') }}"> 列出所有客戶資料 </a>
+<hr/>
+<a href="{{ url_for('rawbean.rawbean_handler') }}"> 列出所有庫存豆況 </a>
+<a href="{{ url_for('rawbean.addrawbean') }}"> 增加庫存豆種 </a>
+<hr/>
+<a> 列出所有生豆訂單 </a>
+<a> 新建生豆訂單 </a>
+<hr/>
+<a> 列出所有熟豆訂單 </a>
+<a> 新建熟豆訂單 </a>
+{% endblock %}
+

@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}New Post{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+  <form method="post" action="{{ url_for('rawbean.rawbean_handler') }}">
+    <label for="{{ beancol[1] }}"> {{ beancoldesc[0] }}</label>
+    <input type='text' name="{{ beancol[1] }}" id="{{ beancol[1] }}" required />
+  {% for i in range(1, len) %}
+    <label for="{{ beancol[i + 1] }}"> {{ beancoldesc[i] }}</label>
+    <input type='text' name="{{ beancol[i + 1] }}" id="{{ beancol[i + 1] }}" />
+  {% endfor %}
+
+    <input type="submit" value="Save">
+  </form>
+{% endblock %}
+

@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}RAWBEAN{% endblock %}</h1>
+  <a class="action" href="{{ url_for('rawbean.addrawbean') }}">Add Raw Bean</a>
+{% endblock %}
+
+{% block content %}
+  {% for bean in beanlist %}
+    <article class="post">
+      <header>
+        <div>
+          <div class="body">{{ bean[0] }} {{ bean[1] }}</div>
+          <div class="about">{{ bean[2] }}/{{ bean[3] }}/{{ bean[4] }}/{{ bean[5] }}/{{ bean[6] }}</div>
+        </div>
+      </header>
+    </article>
+    {% if not loop.last %}
+      <hr>
+    {% endif %}
+  {% endfor %}
+
+{% endblock %}
+

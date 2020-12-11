@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "../../flask-mysql"
+		},
+		{
+			"path": ".."
+		},
+		{
+			"path": "../../python_mysql"
+		}
+	],
+	"settings": {}
+}

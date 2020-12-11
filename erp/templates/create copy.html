@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}New Post{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+  <form method="post" action="{{ url_for('rawbean.rawbean_handler') }}">
+    <label for="rawbean_name">豆名（例如：耶加雪菲）(*必填*)</label>
+    <input type='text' name="rawbean_name" id="rawbean_name" required />
+
+    <label for="producer_area">產區（例如：非洲地區，肯亞）(非必填)</label>
+    <input type='text' name="producer_area" id="producer_area"></input>
+
+    <label for="producer">莊園(非必填)</label>
+    <input type='text' name="producer" id="producer"></input>
+
+    <label for="level">分級（例如：G1)(非必填)</label>
+    <input type='text' name="level" id="level"></input>
+
+    <label for="peel_process">處理方式（例如：日曬）(非必填)</label>
+    <input type='text' name="peel_process" id="peel_process"></input>
+
+    <label for="supplier">供貨商（例如：聯結咖啡）(非必填)</label>
+    <input type='text' name="supplier" id="supplier"></input>
+
+    <label for="average_price">均價(KG/NTD)(非必填，會根據下單價格自動計算)</label>
+    <input type='text' name="average_price" id="average_price"></input>
+
+    <label for="amount_kg">庫存重量(KG)(非必填)</label>
+    <input type='text' name="amount_kg" id="amount_kg"></input>
+
+    <label for="oldest_date">最早進貨日期(非必填)</label>
+    <input type='text' name="oldest_date" id="oldest_date"></input>
+
+    <label for="latest_date">最近進貨日期(非必填)</label>
+    <input type='text' name="latest_date" id="latest_date"></input>
+
+    <label for="quality">生豆品質（例如：品質優良，大小均衡）(非必填)</label>
+    <input type='text' name="quality" id="quality"></input>
+
+    <label for="appendix">備註（例如：堅果、橘子、柳橙、茉莉花香、尾韻清甜）(非必填)</label>
+    <input type='text' name="appendix" id="appendix"></input>
+
+    <input type="submit" value="Save">
+  </form>
+{% endblock %}
+

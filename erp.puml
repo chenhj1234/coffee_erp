@@ -1,0 +1,13 @@
+@startuml
+state FirstPage {
+    state "Check User Logged In" as ChkUser
+    state "ERP Main Page" as ERPMain
+    [*] --> ChkUser
+    ChkUser --> LoginPage : User Not Login
+    ChkUser --> ERPMain : User Did Login
+    LoginPage --> ERPMain : User Login
+}
+[*] --> FirstPage
+FirstPage --> Register : User Press Register in
+Register --> FirstPage : User Register Done
+@enduml
