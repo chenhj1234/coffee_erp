@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}New Post{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+<script type='text/javascript'>
+  function applySelection(selection_name, hidden_id, hidden_name) {
+    var select_obj = document.getElementById(selection_name)
+    console.log(select_obj.value);
+    console.log(select_obj.options[select_obj.selectedIndex].text);
+    var rawbean_obj = document.getElementById(hidden_name)
+    rawbean_obj.value = select_obj.options[select_obj.selectedIndex].text
+    var rawbean_id_obj = document.getElementById(hidden_id)
+    rawbean_id_obj.value = select_obj.value
+    select_obj.disabled = true
+  }
+  function applyFormSelection() {
+    applySelection('rawbeanselect', 'rawbean_id', 'rawbean_name')
+    applySelection('supplierselect', 'supplier_id', 'supplier_name')
+  }
+  function formatDate(date) {
+    return date.getFullYear()+ "-" + (date.getMonth()+1) + "-" + date.getDate();
+  }
+</script>
+
+  <form method="post" action="{{ url_for('purchase.purchase_handler') }}" onSubmit="applyFormSelection()">
+  {% for i in range(0, len) %}
+    {% if itemcol[i + 1] in itemfix %}
+      {% if itemfix[itemcol[i + 1]]['modifier'] == 'hidden' %}
+        <input type='text' name="{{ itemcol[i + 1] }}" id="{{ itemcol[i + 1] }}" hidden />
+
+      {% elif itemfix[itemcol[i + 1]]['modifier'] == 'hidden_rawbean_option' %}
+        <input type='text' name="{{ itemcol[i + 1] }}" id="{{ itemcol[i + 1] }}" hidden />
+        <label for="rawbeanselect"> {{ itemcoldesc[i] }}</label>
+        <select id="rawbeanselect" name="rawbeanselect">
+          {% for j in range(0, rawbean_len) %}
+            <option value={{rawbeans[j][0]}} {% if j == 0 %} {{'selected'}} {% endif %}>{{rawbeans[j][1]}}</option>  
+          {% endfor %}
+          <option value='-1'> 不指定 </option>  
+        </select>
+        <br/>
+
+      {% elif itemfix[itemcol[i + 1]]['modifier'] == 'hidden_supplier_option' %}
+
+        <input type='text' name="{{ itemcol[i + 1] }}" id="{{ itemcol[i + 1] }}" hidden />
+        <label for="supplierselect"> {{ itemcoldesc[i] }}</label>
+        <select id="supplierselect" name="supplierselect">
+          {% for i in range(0, supplier_len) %}
+            <option value={{suppliers[i][0]}} {% if i == 0 %} {{'selected'}} {% endif %}>{{suppliers[i][1]}}</option>  
+          {% endfor %}
+          <option value='-1'> 不指定 </option>  
+        </select>
+        <br/>
+
+      {% elif itemfix[itemcol[i + 1]]['modifier'] == 'hidden_date' %}
+        <label for="{{ itemcol[i + 1] }}"> {{ itemcoldesc[i] }}</label>
+        <input type='text' name="{{ itemcol[i + 1] }}" id="{{ itemcol[i + 1] }}" />
+        <script type='text/javascript'>
+          document.getElementById("{{ itemcol[i + 1] }}").value = formatDate(new Date);
+        </script>
+      {% else %}
+        <label for="{{ itemcol[i + 1] }}"> {{ itemcoldesc[i] }}</label>
+        <input type='text' name="{{ itemcol[i + 1] }}" id="{{ itemcol[i + 1] }}" value={{ itemfix[itemcol[i + 1]]['value'] }} 
+            {% if itemfix[itemcol[i + 1]]['modifier'] == 'fixed' %} 
+              {{ 'readonly' }}
+            {% endif %} />
+      {% endif %}
+    {% else %}
+        <label for="{{ itemcol[i + 1] }}"> {{ itemcoldesc[i] }}</label>
+        <input type='text' name="{{ itemcol[i + 1] }}" id="{{ itemcol[i + 1] }}" />
+    {% endif %}
+  {% endfor %}
+
+    <input type="submit" value="Save">
+  </form>
+{% endblock %}
+

@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Purchase{% endblock %}</h1>
+  <a class="action" href="{{ url_for('purchase.addpurchase') }}">Add Purchase Order</a>
+{% endblock %}
+
+{% block content %}
+  {% for item in itemlist %}
+    <article class="post">
+      <header>
+        <div>
+          <div class="body">單號：{{ item[0] }} 發票號：{{ item[1] }}</div>
+          <div class="about">下單人員：{{ item[3] }}</div>
+          <div class="about">種類：{{ item[5] }}</div>
+          <div class="about">進貨商：{{ item[7] }}</div>
+          <div class="about">單價：{{ item[8] }}(元/KG) 數量：{{ item[9] }}(kg) 總價：{{ item[10] }} </div>
+        </div>
+      </header>
+    </article>
+    {% if not loop.last %}
+      <hr>
+    {% endif %}
+  {% endfor %}
+
+{% endblock %}
+

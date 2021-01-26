@@ -28,14 +28,15 @@ def rawbean_handler():
         else :
             ERP.dbgprint ('Record already exist', ERP.K_DEBUG_RAWBEAN)
         beanlist = db.get_rawbean()
-        return render_template('rawbean_list.html', beanlist= beanlist)
+        return redirect(url_for('rawbean.rawbean_handler'), code=302) #render_template('rawbean_list.html', beanlist= beanlist)
 
 @bp.route('/addrawbean', methods=['GET'])
 def addrawbean():
     beancol = db.get_rawbean_table_col()
-    beancoldesc = ['豆名（例如：耶加雪菲）(*必填*)','產區（例如：非洲地區，肯亞）(非必填)','莊園(非必填)','分級（例如：G1)(非必填)','處理方式（例如：日曬）(非必填)','供貨商（例如：聯結咖啡）(非必填)'
+    beancoldesc = ['豆名（例如：耶加雪菲）(*必填*)','產區（例如：非洲地區，肯亞）(非必填)','莊園(非必填)','分級（例如：G1)(非必填)','處理方式（例如：日曬）(非必填)','供貨商（例如：聯結咖啡）(非必填)','供貨商編號（需要供貨商相符）(非必填)'
         ,'均價(KG/NTD)(非必填，會根據下單價格自動計算)','庫存重量(KG)(非必填)','最早進貨日期(非必填)','最近進貨日期(非必填)','生豆品質（例如：品質優良，大小均衡）(非必填)','備註（例如：堅果、橘子、柳橙、茉莉花香、尾韻清甜）(非必填)']
     ERP.dbgprint (beancol, ERP.K_DEBUG_RAWBEAN)
+    suppliers = db.get_supplier()
     if request.method == 'GET':
-        return render_template('create.html', len = len(beancoldesc), beancol = beancol, beancoldesc = beancoldesc)
+        return render_template('create_rawbean.html', len = len(beancoldesc), beancol = beancol, beancoldesc = beancoldesc, supplier_col = 6, suppliers = suppliers, supplier_len = len(suppliers))
     

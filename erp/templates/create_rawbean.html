@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}New Post{% endblock %}</h1>
+{% endblock %}
+
+
+{% block content %}
+<script type='text/javascript'>
+  function applySelection(/*select_obj*/) {
+    var select_obj = document.getElementById("supplierselect")
+    console.log(select_obj.value);
+    console.log(select_obj.options[select_obj.selectedIndex].text);
+    var supplier_obj = document.getElementById("{{ beancol[supplier_col] }}")
+    supplier_obj.value = select_obj.options[select_obj.selectedIndex].text
+    var supplier_id_obj = document.getElementById("{{ beancol[supplier_col + 1] }}")
+    supplier_id_obj.value = select_obj.value
+    select_obj.disabled = true
+  }
+</script>
+  <form method="post" action="{{ url_for('rawbean.rawbean_handler') }}" onSubmit="applySelection()">
+    <label for="{{ beancol[1] }}"> {{ beancoldesc[0] }}</label>
+    <input type='text' name="{{ beancol[1] }}" id="{{ beancol[1] }}" required />
+  {% for i in range(1, supplier_col - 1) %}
+    <label for="{{ beancol[i + 1] }}"> {{ beancoldesc[i] }}</label>
+    <input type='text' name="{{ beancol[i + 1] }}" id="{{ beancol[i + 1] }}" />
+  {% endfor %}
+    <label for="supplierselect"> {{ beancoldesc[supplier_col-1] }}</label>
+    <select id="supplierselect" name="supplierselect">
+      {% for i in range(0, supplier_len) %}
+        <option value={{suppliers[i][0]}} {% if i == 0 %} {{'selected'}} {% endif %}>{{suppliers[i][1]}}</option>  
+      {% endfor %}
+        <option value='-1'> 不指定 </option>  
+    </select><br/>
+    <input type="hidden" name="{{ beancol[supplier_col] }}" id="{{ beancol[supplier_col] }}" />
+    <input type="hidden" name="{{ beancol[supplier_col+1] }}" id="{{ beancol[supplier_col+1] }}" />
+  {% for i in range(supplier_col + 1, len) %}
+    <label for="{{ beancol[i + 1] }}"> {{ beancoldesc[i] }}</label>
+    <input type='text' name="{{ beancol[i + 1] }}" id="{{ beancol[i + 1] }}" />
+  {% endfor %}
+
+    <input type="submit" value="Save">
+  </form>
+{% endblock %}
+

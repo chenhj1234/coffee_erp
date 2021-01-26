@@ -1,5 +1,7 @@
 import functools
 import mysql.connector
+import click
+
 from mysql.connector import Error
 from flask import current_app, g
 from flask.cli import with_appcontext
@@ -177,7 +179,7 @@ def get_rawbean(bean_id = None, bean_name = '', request_form = {}):
                 param[key] = request_form[key]
     dbgprint(param, opt='db')
     qstr = gen_query_str(ERP.K_RAWBEAN_TABLE_NAME, param)
-    dbgprint(qstr, opt='db')
+    dbgprint(qstr)
     reslist = issue_query(qstr)
     dbgprint(reslist, opt='db')
     return reslist
@@ -189,10 +191,13 @@ def get_rawbean_table_col():
 def add_rawbean(request_form = {}):
     param = {}
     cols = get_rawbean_table_col()
+    print("here.................")
     for i in range(0, len(cols)):
         #if (request_form[cols[i]]):
         #param[cols[i]] = request_form[cols[i]]
         if cols[i] in request_form:
+            #if (cols[i] == 'supplier_select'):
+            #    continue
             if (request_form[cols[i]] == ''):
                 param[cols[i]] = None
             else:
@@ -261,10 +266,50 @@ def get_customer(req_id = None, req_name = '', request_form = {}):
     dbgprint(reslist)
     return reslist
 
+def get_purchase_table_col():
+    return db_table_col[ERP.K_PURCHASE_TABLE_NAME]
+
+@db_connect_required
+def get_purchase(req_id = None, req_name = '', request_form = {}):
+    param = {}
+    if req_id is not None:
+        param['purchase_id'] = req_id
+    if req_name != '':
+        param['purchase_name'] = req_name
+    if len(request_form) > 0:
+        for key in request_form:
+            if request_form[key] != '':
+                param[key] = request_form[key]
+    dbgprint(param, opt=ERP.K_DEBUG_PURCHASE)
+    qstr = gen_query_str(ERP.K_PURCHASE_TABLE_NAME, param)
+    dbgprint(qstr, opt=ERP.K_DEBUG_PURCHASE)
+    reslist = issue_query(qstr)
+    print(reslist)
+    dbgprint(reslist, opt=ERP.K_DEBUG_PURCHASE)
+    return reslist
+
+@db_connect_required
+def add_purchase(request_form = {}):
+    param = {}
+    cols = get_purchase_table_col()
+    for i in range(0, len(cols)):
+        #if (request_form[cols[i]]):
+        #param[cols[i]] = request_form[cols[i]]
+        if cols[i] in request_form:
+            if (request_form[cols[i]] == ''):
+                param[cols[i]] = None
+            else:
+                param[cols[i]] = request_form[cols[i]]
+        else:
+            param[cols[i]] = None
+    qstr = gen_insert_str(ERP.K_PURCHASE_TABLE_NAME, param)
+    issue_query(qstr, True)
+
 def init_app(app):
     app.teardown_appcontext(close_db)
     get_db()
     init_table()
+    app.cli.add_command(init_db_command)
 
 def add_to_table(tablename = '', collist = ''):
     cols = []
@@ -282,5 +327,14 @@ def init_table():
     add_table_colume_list(ERP.K_RAWBEAN_TABLE_NAME)
     add_table_colume_list(ERP.K_SUPPLIER_TABLE_NAME)
     add_table_colume_list(ERP.K_CUSTOMER_TABLE_NAME)
+    add_table_colume_list(ERP.K_PURCHASE_TABLE_NAME)
     dbgprint(db_table_col, ERP.K_DEBUG_DB)
     
+@click.command('init-db')
+@with_appcontext
+def init_db_command():
+    cols = get_purchase_table_col()
+    click.echo(cols)
+    purchs = get_purchase()
+    click.echo(purchs)
+

@@ -44,9 +44,15 @@ def create_app(test_config=None):
     from . import customer
     app.register_blueprint(customer.bp)
 
+    from . import purchase
+    app.register_blueprint(purchase.bp)
+
     from . import index
     app.register_blueprint(index.bp)
     app.add_url_rule('/', endpoint='index')
 
+    from . import generate_template
+    generate_template.init_generator(app)
+    
     return app
 
