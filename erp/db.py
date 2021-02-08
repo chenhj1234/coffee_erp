@@ -323,11 +323,34 @@ def add_table_colume_list(table_name = ''):
     dbgprint(res, ERP.K_DEBUG_DB)
     add_to_table(tablename = table_name, collist = res)
 
+class TblCol:
+    def __init__(self, name = "", desc = ""):
+        self.colname = name
+        self.coldesc = desc
+    def __str__(self):
+        return "name:{name} description:{desc}".format(name = self.colname, desc=self.coldesc)
+    def __unicode__(self):
+        return u"name:{name} description:{desc}".format(name = self.colname, desc=self.coldesc)
+
+def add_to_table_with_info(tablename = '', collist = ''):
+    cols = []
+    for i,oneitem in enumerate(collist):
+        tblcol = TblCol(name = oneitem[0], desc=oneitem[8])
+        cols.append(tblcol)
+    db_table_col[tablename + "_info"] = cols
+
+def add_table_colume_list_with_info(table_name = ''):
+    qstr = "SHOW FULL COLUMNS FROM `{table_name}`;".format(table_name = table_name)
+    res = issue_query(qstr)
+    add_to_table_with_info(tablename=table_name,collist=res)
+
+
 def init_table():
     add_table_colume_list(ERP.K_RAWBEAN_TABLE_NAME)
     add_table_colume_list(ERP.K_SUPPLIER_TABLE_NAME)
     add_table_colume_list(ERP.K_CUSTOMER_TABLE_NAME)
     add_table_colume_list(ERP.K_PURCHASE_TABLE_NAME)
+    add_table_colume_list_with_info(ERP.K_PURCHASE_TABLE_NAME)
     dbgprint(db_table_col, ERP.K_DEBUG_DB)
     
 @click.command('init-db')
